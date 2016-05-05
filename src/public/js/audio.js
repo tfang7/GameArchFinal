@@ -7,7 +7,11 @@ var array = new Array();
 var boost = 0;
 
 var ctx = $("#spectrogram").get()[0].getContext("2d");
-
+var gradient = ctx.createLinearGradient(0,0,0,300);
+    gradient.addColorStop(1,'#000000');
+    gradient.addColorStop(0.75,'#ff0000');
+    gradient.addColorStop(0.25,'#ffff00');
+    gradient.addColorStop(0,'#ffffff');
 var interval = window.setInterval(function() {
 	if($('#loading_dots').text().length < 3) {
 		$('#loading_dots').text($('#loading_dots').text() + '.');
@@ -36,6 +40,47 @@ request.onload = function(){
 		return;
 	}
 
+	initAudioNodes(buffer);
+
+
+	sourceJs.onaudioprocess = function(e){
+		array = new Uint8Array(analyser.frequencyBinCount);
+        var arr = new Float32Array
+		analyser.getByteFrequencyData(array);
+
+        ctx.clearRect(0,0,1000,325);
+        ctx.fillStyle = gradient;
+        drawSpectrum(array);
+        
+        
+	};
+    
+    clearInterval(interval);
+
+			// popup
+			$('body').append($('<div onclick="play();" id="play" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"><div id="play_link"></div></div>'));
+			$('#play_link').css('top', ($(window).height() / 2 - $('#play_link').height() / 2) + 'px');
+			$('#play_link').css('left', ($(window).width() / 2 - $('#play_link').width() / 2) + 'px');
+			$('#play').fadeIn()
+	},
+	function(error){
+		//Decode error
+        $('#info').text('Decoding error:' + error);
+
+	}
+	
+	
+	);
+	
+};
+request.onerror = function() {
+	$('#info').text('buffer: XHR error');
+};
+
+request.send();
+
+function initAudioNodes(buffer){
+    
 	sourceJs = context.createScriptProcessor(2048, 1, 1);
 	sourceJs.buffer = buffer;
 	sourceJs.connect(context.destination);
@@ -64,38 +109,14 @@ request.onload = function(){
 	source.connect(analyser);
 	analyser.connect(sourceJs);
 	source.connect(context.destination);
-	
-	sourceJs.onaudioprocess = function(e){
-		array = new Uint8Array(analyser.frequencyBinCount);
-		analyser.getByteFrequencyData(array);
-       // var average = getAverageVolume(array);
-        
-        
-	};
-    clearInterval(interval);
+}
 
-			// popup
-			$('body').append($('<div onclick="play();" id="play" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"><div id="play_link"></div></div>'));
-			$('#play_link').css('top', ($(window).height() / 2 - $('#play_link').height() / 2) + 'px');
-			$('#play_link').css('left', ($(window).width() / 2 - $('#play_link').width() / 2) + 'px');
-			$('#play').fadeIn()
-	},
-	function(error){
-		//Decode error
-        $('#info').text('Decoding error:' + error);
-
-	}
-	
-	
-	);
-	
-};
-request.onerror = function() {
-	$('#info').text('buffer: XHR error');
-};
-
-request.send();
-
+function drawSpectrum(array){
+    for (var i = 0; i < array.length; i++){
+        var value = array[i];
+        ctx.fillRect(i*5,325-value,3,325);
+    }
+}
 function play() {
 	$('#play').fadeOut('normal', function() {
 		$(this).remove();
