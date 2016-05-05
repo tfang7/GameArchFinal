@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>three.js - Jotunheimen</title>
+<title>Landscape Test</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <style>
@@ -11,43 +11,9 @@
 <body>
 <div id="webgl"></div>
 <script src="js/three.min.js"></script>
-<script src="js/TrackballControls.js"></script> 
-<script>
-    //SCENE SETUP
-    var width  = window.innerWidth,
-        height = window.innerHeight;
-    var scene = new THREE.Scene();
-    var axes = new THREE.AxisHelper(200);
-    scene.add(axes);
-    var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(0, -50, 50);
-    var renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(width, height);
-    
-    //CREATE THE LANDSCAPE
-    var geometry = new THREE.PlaneGeometry(60, 60, 199, 199);
-    for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-        geometry.vertices[i].z = 0;
-    }
-    var material = new THREE.MeshPhongMaterial({
-        color: 0x49C960, 
-        wireframe: true
-    });
-    var plane = new THREE.Mesh(geometry, material);
-    scene.add(plane);
-    
-    //ADD CAMERA CONTROLS
-    var controls = new THREE.TrackballControls(camera); 
-    document.getElementById('webgl').appendChild(renderer.domElement);
-    render();
-    
-    
-    function render() {
-        //RENDER EVERYTHING
-        controls.update();    
-        requestAnimationFrame(render);
-        renderer.render(scene, camera);
-    }
-</script>
+<!-- <script src="js/jquery.js"></script> -->
+<!-- <script src="js/audio.js"></script> -->
+<script src="js/TrackballControls.js"> </script> 
+<script type="text/javascript" src="js/TerrainMaker.js"> </script>
 </body>
 </html>
