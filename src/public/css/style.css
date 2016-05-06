@@ -5,3 +5,9 @@
 	padding: 5px;
 	text-align: right;
 }
+#spectrogram{
+ position:relative;
+    width:100%;
+    height:100px;
+    
+}
