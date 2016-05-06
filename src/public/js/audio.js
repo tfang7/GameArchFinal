@@ -4,6 +4,9 @@ var analyser,analyser2;
 var splitter;
 var url = 'public/data/HappyDays.mp3';
 var array = new Array();
+var dataArray = new Array();
+var _fftSize = 2048;
+var bufferLength = 2048;
 var boost = 0;
 var audioLoaded = false;
 var playing = false;
@@ -46,9 +49,9 @@ request.onload = function(){
 
 	sourceJs.onaudioprocess = function(e){
 		array = new Uint8Array(analyser.frequencyBinCount);
-        var arr = new Float32Array
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
 		analyser.getByteFrequencyData(array);
-
+        analyser.getByteTimeDomainData(dataArray);
         ctx.clearRect(0,0,1000,325);
         ctx.fillStyle = gradient;
         drawSpectrum(array);
@@ -83,17 +86,17 @@ request.send();
 
 function initAudioNodes(buffer){
     
-	sourceJs = context.createScriptProcessor(2048, 1, 1);
+	sourceJs = context.createScriptProcessor(bufferLength, 1, 1);
 	sourceJs.buffer = buffer;
 	sourceJs.connect(context.destination);
 	//first analyser
     analyser = context.createAnalyser();
-	analyser.smoothingTimeConstant = 0.5;
-	analyser.fftSize = 256;
+	analyser.smoothingTimeConstant = 0.8;
+	analyser.fftSize = _fftSize;
 	//second
     analyser2 = context.createAnalyser();
-    analyser2.smoothingTimeConstant = 0.5;
-    analyser2.fftSize = 256;
+    analyser2.smoothingTimeConstant = 0.8;
+    analyser2.fftSize = _fftSize;
     
     
     //Spectrogram

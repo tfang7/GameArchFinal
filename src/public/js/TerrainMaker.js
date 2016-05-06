@@ -1,4 +1,4 @@
-//console.log("Test");
+//    ole.log("Test");
 
 //SCENE SETUP
 var width  = window.innerWidth/2,
@@ -34,6 +34,7 @@ function render() {
     //RENDER EVERYTHING
    // console.log("Array: " + array.length);
     controls.update();    
+    console.log(dataArray);
     requestAnimationFrame(render);
     renderer.render(scene, camera);
     if(array.length > 0){
@@ -44,7 +45,7 @@ function render() {
         for (var i = 0; i < terrain.vertices.length; i++) {
             var height = array[i];
             if(height != 0)
-                height = height/25;
+                height = height/20;
             terrain.vertices[i].z = height;
             
         }
@@ -93,9 +94,12 @@ function UpdateFaces(terrainMap){
           //  console.log(
          vertexIndex = f[ faceIndices[j] ];
          p = terrainMap.vertices[ vertexIndex ];
+         color = new THREE.Color(0xffffff);
+         //color.setRGB(p.x,p.y,p.z);
+        //Cool Colors!:
+            //( p.z / radius + 1 ) / 2, p.z * Math.sin(p.z), Math.cos(p.z) 
             
-         color = new THREE.Color(0xff0000);
-         color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
+         color.setHSL( ( p.z / radius + 1 ) / 2, p.z * Math.sin(p.z), Math.cos(p.z) );
          f.vertexColors[ j ] = color;
         }
         
@@ -104,6 +108,10 @@ function UpdateFaces(terrainMap){
 
 
 }     
+
+function computeVertexColor(color){
+    
+}
     /*for (var i = 0; i < terrainMap.faces.length; i ++ ) {
 
         f  = terrainMap.faces[ i ];
