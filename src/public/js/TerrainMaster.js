@@ -13,7 +13,7 @@ renderer.setSize(width, height);
 var w = 127/2;
 var l = 127/2;
 
-var option = 0;
+var option = 1;
 
 var light = new THREE.PointLight(0x404040, 5, 0 );
 light.position.set( 0, 0, 50 );
@@ -45,21 +45,18 @@ var fullArray = new Array();
 var count = 0;
 var row = 0;
 
-if (option == 0){
-    render1();
-} else{
-    render2();
-}
+render();
 
-
-function render2() {
-    //RENDER EVERYTHING
-    //console.log("Array: " + array.length);
-    controls.update();    
-    requestAnimationFrame(render2);
+function render(){
+    controls.update();
+    requestAnimationFrame(render);
     renderer.render(scene, camera);
     if((array.length > 0) && (array[0] != 0) && playing){
-        updateTerrain();
+        if (option == 0){
+            updateTerrain();
+        } else{
+            updateTerrain2();
+        }
     }
 }
 
@@ -92,53 +89,34 @@ function updateTerrain(){
     scene.add(plane);
 }
 
-function render1() {
-    //RENDER EVERYTHING
-   // console.log("Array: " + array.length);
-    controls.update();    
-    requestAnimationFrame(render1);
-    renderer.render(scene, camera);
-    if(array.length > 0){
-        
-        scene.remove(plane);
-        
-        terrain = new THREE.PlaneGeometry(60, 60, 20, 20);
-        for (var i = 0; i < terrain.vertices.length; i++) {
-            var height = array[i];
-            if(height != 0)
-                height = height/25;
-            terrain.vertices[i].z = height;
-            
-        }
-        UpdateFaces(terrain);
-        var material = new THREE.MeshBasicMaterial({
-            vertexColors:THREE.VertexColors
-        });
-        plane = new THREE.Mesh(terrain, material);
-        edges = new THREE.FaceNormalsHelper( plane, 2, 0x00ff00, 1 );
+function updateTerrain2() {
+    scene.remove(plane);
 
-        //plane.geometry.dynamic = true;
-        //plane.geometry.verticesNeedUpdate = true;
-        //plane.geometry.normalsNeedUpdate = true;
-        plane.geometry.dynamic = true;
-        plane.geometry.verticesNeedUpdate = true;
-        plane.geometry.normalsNeedUpdate = true;
-        plane.geometry.colorsNeedUpdate = true;
-        plane.dynamic = true;
-        
+    terrain = new THREE.PlaneGeometry(60, 60, 20, 20);
+    for (var i = 0; i < terrain.vertices.length; i++) {
+        var height = array[i];
+        if(height != 0)
+            height = height/25;
+        terrain.vertices[i].z = height;
 
-        scene.add(plane);
-        
-        
-        
-        /*console.log(plane.geometry.vertices.length);
-        for (var i = 0; i < plane.geometry.vertices.length; i++) {
-            //console.log("Index " + i + ": " + array[i]);
-            plane.geometry.vertices[i].z = array[i];
-        }
-        scene.remove(plane);
-        scene.add(plane);*/
     }
+    UpdateFaces(terrain);
+    var material = new THREE.MeshBasicMaterial({
+        vertexColors:THREE.VertexColors
+    });
+    plane = new THREE.Mesh(terrain, material);
+    edges = new THREE.FaceNormalsHelper( plane, 2, 0x00ff00, 1 );
+
+    //plane.geometry.dynamic = true;
+    //plane.geometry.verticesNeedUpdate = true;
+    //plane.geometry.normalsNeedUpdate = true;
+    plane.geometry.dynamic = true;
+    plane.geometry.verticesNeedUpdate = true;
+    plane.geometry.normalsNeedUpdate = true;
+    plane.geometry.colorsNeedUpdate = true;
+    plane.dynamic = true;
+
+    scene.add(plane);
 }
 
 
@@ -166,9 +144,11 @@ function UpdateFaces(terrainMap){
 }
 
 function Toggle(){
+    console.log("Toggle: ");
     if (option == 0){
         option = 1;
     } else{
         option = 0;
     }
+    console.log(option);
 }
