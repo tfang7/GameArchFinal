@@ -134,6 +134,7 @@ document.addEventListener('keydown', function(event) {
     if(event.keyCode == 80) {
         if (audioLoaded){
             var state = source.context.state;
+            playing = !playing;
             if (state == 'running'){
                 source.context.suspend();
 
@@ -142,12 +143,9 @@ document.addEventListener('keydown', function(event) {
                 source.context.resume();
 
             }
-            console.log(source.context.state);
             
         }
 
-
-        console.log(playing);
     };
 
 });
