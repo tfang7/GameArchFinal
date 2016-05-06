@@ -15,8 +15,25 @@
 <script type="text/javascript" src="public/js/three.min.js"></script>
 <script type="text/javascript" src="public/js/audio.js"></script>
 <script type="text/javascript" src="public/js/TrackballControls.js"></script>
-<script type="text/javascript" src="public/js/TerrainMaster.js"></script>
+<script type="text/javascript" src="public/js/TerrainMaker.js"></script>
+<script type="x-shader/x-vertex" id="vertexShader">
+        // Put the Vertex Shader code here
+        varying vec2 vUv;
+        void main(){
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
+        }
+
+</script>
+<script type="x-shader/x-vertex" id="fragmentShader">
+    varying vec2 vUv;
+    void main() {
+        // colour is RGBA: u, v, 0, 1
+        gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+
+    }
+    </script>
 <button onclick="myFunction()">Toggle</button>
 <script>
     function myFunction(){

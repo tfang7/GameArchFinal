@@ -49,16 +49,18 @@ function render() {
             terrain.vertices[i].z = height;
             
         }
-        UpdateFaces(terrain);
+        /*UpdateFaces(terrain);
         var material = new THREE.MeshBasicMaterial({
             vertexColors:THREE.VertexColors
+        });*/
+        var material = new THREE.ShaderMaterial({
+            vertexShader: document.getElementById( 'vertexShader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            
         });
         plane = new THREE.Mesh(terrain, material);
         edges = new THREE.FaceNormalsHelper( plane, 2, 0x00ff00, 1 );
 
-        //plane.geometry.dynamic = true;
-        //plane.geometry.verticesNeedUpdate = true;
-        //plane.geometry.normalsNeedUpdate = true;
         plane.geometry.dynamic = true;
         plane.geometry.verticesNeedUpdate = true;
         plane.geometry.normalsNeedUpdate = true;
@@ -105,28 +107,6 @@ function UpdateFaces(terrainMap){
         
     }
     terrainMap.computeFaceNormals();
-
-
 }     
 
-function computeVertexColor(color){
-    
-}
-    /*for (var i = 0; i < terrainMap.faces.length; i ++ ) {
-
-        f  = terrainMap.faces[ i ];
-        console.log(f);
-        /*for( var j = 0; j < 3; j++ ) {
-
-            vertexIndex = f[ faceIndices[ j ] ];
-
-            p = terrainMap.vertices[ vertexIndex ];
-
-            color = new THREE.Color( 0xffffff );
-            color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
-            f.vertexColors[ j ] = color;
-        }
-
-    }    */
-    
 
