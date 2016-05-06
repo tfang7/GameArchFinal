@@ -163,4 +163,12 @@ function UpdateFaces(terrainMap){
         
     }
     terrainMap.computeFaceNormals();
-}     
+}
+
+function Toggle(){
+    if (option == 0){
+        option = 1;
+    } else{
+        option = 0;
+    }
+}
