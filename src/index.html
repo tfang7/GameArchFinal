@@ -19,8 +19,14 @@
 <script type="x-shader/x-vertex" id="vertexShader">
         // Put the Vertex Shader code here
         varying vec2 vUv;
+        uniform float time;
+
         void main(){
             vUv = uv;
+            vec2 position = uv;
+            position.x = position.x + (0.5 * sin (time/5.));
+            position.y = position.y + (0.5 * cos (time/5.));
+
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
         }
@@ -28,7 +34,12 @@
 </script>
 <script type="x-shader/x-vertex" id="fragmentShader">
     varying vec2 vUv;
+    uniform float time;
+
     void main() {
+        vec2 position = -1.0 + 2.0 * vUv;
+
+        
         // colour is RGBA: u, v, 0, 1
         gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
 
@@ -37,6 +48,7 @@
 <button onclick="toggle1()">Toggle Terrain Generation</button>
 <button onclick="toggle2()">Toggle Shader</button>
 <button onclick="toggle3()">Toggle Height Generation</button>
+<button onclick="toggle4()">Play/Resume</button>
 
 <script>
     function toggle1(){
@@ -48,6 +60,9 @@
     }
     function toggle3(){
         ToggleHeight();
+    }
+    function toggle4(){
+        PlayToggle();
     }
 </script>
 </body>

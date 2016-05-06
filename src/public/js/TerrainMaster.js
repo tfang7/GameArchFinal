@@ -9,7 +9,7 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 var drawStyle = "none";
-var timeDomain = true;
+var timeDomain = false;
 //GLOBAL VARIABLES
 var w = 127;                  //Width
 var l = 127;                  //Length

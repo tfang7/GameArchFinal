@@ -2,7 +2,7 @@ var context;
 var source, sourceJs;
 var analyser,analyser2;
 var splitter;
-var url = 'public/data/DigitalLove.mp3';
+var url = 'public/data/Astronomia.mp3';
 var array = new Array();
 var dataArray = new Array();
 var _fftSize = 2048;
@@ -140,12 +140,9 @@ function AudioToggle(){
     } else{
         _fftSize = 2048;
     }
-    console.log("Size: " + _fftSize);
 }
-
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 80) {
-        if (audioLoaded){
+function PlayToggle(){
+            if (audioLoaded){
             var state = source.context.state;
             playing = !playing;
             if (state == 'running'){
@@ -158,6 +155,11 @@ document.addEventListener('keydown', function(event) {
             }
             
         }
+    
+}
+document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 80) {
+        PlayToggle();
 
     };
 
