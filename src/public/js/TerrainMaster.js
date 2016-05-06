@@ -177,6 +177,8 @@ function UpdateFaces(terrainMap){
                 case 5:
                     color.setRGB(0, MakePercent(p.z), MakePercent(p.z)*2);
                     break;
+                case 6:
+                    color.setRGB(MakePercent(p.z), MakePercent(p.z)*.5, 1-MakePercent(p.z));
             }
             f.vertexColors[ j ] = color;
         }
@@ -191,7 +193,7 @@ function MakePercent(n){
 }
 
 function ToggleShader(){
-    if(optShader < 5){
+    if(optShader < 6){
         optShader++;
     } else{
         optShader = 0;
