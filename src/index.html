@@ -15,7 +15,7 @@
 <script type="text/javascript" src="public/js/three.min.js"></script>
 <script type="text/javascript" src="public/js/audio.js"></script>
 <script type="text/javascript" src="public/js/TrackballControls.js"></script>
-<script type="text/javascript" src="public/js/TerrainMaker.js"></script>
+<script type="text/javascript" src="public/js/TerrainMaster.js"></script>
 <script type="x-shader/x-vertex" id="vertexShader">
         // Put the Vertex Shader code here
         varying vec2 vUv;
@@ -34,11 +34,16 @@
 
     }
     </script>
-<button onclick="myFunction()">Toggle</button>
+<button onclick="toggle1()">Toggle Terrain Generation</button>
+<button onclick="toggle2()">Toggle Shader</button>
+
 <script>
-    function myFunction(){
+    function toggle1(){
         Toggle();
         AudioToggle();
+    }
+    function toggle2(){
+        ToggleShader();
     }
 </script>
 </body>

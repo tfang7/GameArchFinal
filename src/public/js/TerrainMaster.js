@@ -10,11 +10,12 @@ var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 
 //GLOBAL VARIABLES
-var w = 127/2;                  //Width
-var l = 127/2;                  //Length
+var w = 127;                  //Width
+var l = 127;                  //Length
 var fullArray = new Array();    //Contains data for second render style
 var row = 0;                    //Tracks row for second render style
 var option = 1;                 //Determines render style
+var optShader = 0;
 
 //CREATE LIGHT
 var light = new THREE.PointLight(0x404040, 5, 0 );
@@ -119,7 +120,7 @@ function updateTerrain2() {
     for (var i = 0; i < terrain.vertices.length; i++) {
         var height = array[i];
         if(height != 0)
-            height = height/25;
+            height = height/15;
         terrain.vertices[i].z = height;
 
     }
@@ -150,16 +151,51 @@ function UpdateFaces(terrainMap){
     for (var i = 0; i < terrainMap.faces.length; i ++ ) {
         f = terrainMap.faces[i];
         for (var j = 0; j < 3; j++){
-         vertexIndex = f[ faceIndices[j] ];
-         p = terrainMap.vertices[ vertexIndex ];
+            vertexIndex = f[ faceIndices[j] ];
+            p = terrainMap.vertices[ vertexIndex ];
             
-         color = new THREE.Color(0xff0000);
-         color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
-         f.vertexColors[ j ] = color;
+            color = new THREE.Color(0xff0000);
+            //color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
+            color.setRGB(.1, MakePercent(p.z), .1);
+            //console.log("In: " + p.z + ", Out: " + MakePercent(p.z));
+            switch(optShader){
+                case 0:
+                    color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
+                    break;
+                case 1:
+                    color.setRGB(.1, MakePercent(p.z), .1);
+                    break;
+                case 2:
+                    color.setRGB(MakePercent(p.z), MakePercent(p.z), MakePercent(p.z));
+                    break;
+                case 3:
+                    color.setRGB(MakePercent(p.z), .1, .5);
+                    break;
+                case 4:
+                    color.setRGB(MakePercent(p.z), .5, .1);
+                    break;
+                case 5:
+                    color.setRGB(0, MakePercent(p.z), MakePercent(p.z)*2);
+                    break;
+            }
+            f.vertexColors[ j ] = color;
         }
         
     }
     terrainMap.computeFaceNormals();
+}
+
+function MakePercent(n){
+    out = n/15;
+    return out;
+}
+
+function ToggleShader(){
+    if(optShader < 5){
+        optShader++;
+    } else{
+        optShader = 0;
+    }
 }
 
 function Toggle(){
