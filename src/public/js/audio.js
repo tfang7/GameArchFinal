@@ -5,7 +5,8 @@ var splitter;
 var url = 'public/data/HappyDays.mp3';
 var array = new Array();
 var boost = 0;
-
+var audioLoaded = false;
+var playing = false;
 var ctx = $("#spectrogram").get()[0].getContext("2d");
 var gradient = ctx.createLinearGradient(0,0,0,300);
     gradient.addColorStop(1,'#000000');
@@ -56,9 +57,10 @@ request.onload = function(){
 	};
     
     clearInterval(interval);
-
+        play();
+        audioLoaded = true;
 			// popup
-			$('body').append($('<div onclick="play();" id="play" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"><div id="play_link"></div></div>'));
+			//$('body').append($('<div onclick="play();" id="play" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"><div id="play_link"></div></div>'));
 			$('#play_link').css('top', ($(window).height() / 2 - $('#play_link').height() / 2) + 'px');
 			$('#play_link').css('left', ($(window).width() / 2 - $('#play_link').width() / 2) + 'px');
 			$('#play').fadeIn()
@@ -124,3 +126,28 @@ function play() {
 	});
 	source.start(0);
 }
+function stop(){
+ source.stop(0);   
+}
+
+document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 80) {
+        if (audioLoaded){
+            var state = source.context.state;
+            if (state == 'running'){
+                source.context.suspend();
+
+            }
+            else {
+                source.context.resume();
+
+            }
+            console.log(source.context.state);
+            
+        }
+
+
+        console.log(playing);
+    };
+
+});
