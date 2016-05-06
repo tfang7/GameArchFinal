@@ -1,7 +1,7 @@
 
 //SCENE SETUP
 var width  = window.innerWidth,
-    height = window.innerHeight/2;
+    height = window.innerHeight * .75;
 var scene = new THREE.Scene();
 var axes = new THREE.AxisHelper(200);
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
@@ -16,6 +16,8 @@ var fullArray = new Array();    //Contains data for second render style
 var row = 0;                    //Tracks row for second render style
 var option = 1;                 //Determines render style
 var optShader = 0;
+var sizeW = 100;
+var sizeL = 100;
 
 //CREATE LIGHT
 var light = new THREE.PointLight(0x404040, 5, 0 );
@@ -23,7 +25,7 @@ light.position.set( 0, 0, 50 );
 scene.add( light );
 
 //CREATE THE BLANK LANDSCAPE
-var terrain = new THREE.PlaneGeometry(60, l, w, l);
+var terrain = new THREE.PlaneGeometry(sizeW, sizeL, w, l);
 for (var i = 0; i < terrain.vertices.length; i++) {
     terrain.vertices[i].z = 0;
 }
@@ -34,6 +36,16 @@ var material = new THREE.MeshPhongMaterial({
     specular: 0x009900,
     shininess: 30,
     shading: THREE.FlatShading,
+});
+
+var texture = THREE.ImageUtils.loadTexture('public/data/txtrRock.jpg', {}, function() {
+    renderer.render(scene);
+});
+var texture2 = THREE.ImageUtils.loadTexture('public/data/txtrForest.jpg', {}, function() {
+   renderer.render(scene); 
+});
+var matGround = new THREE.MeshBasicMaterial({
+    map: texture
 });
 
 //ASSIGN TO OBJECT
@@ -86,18 +98,27 @@ function updateTerrain(){
         row = 0;
     }
         
-    terrain = new THREE.PlaneGeometry(60, 60, w, l);
+    terrain = new THREE.PlaneGeometry(sizeW, sizeL, w, l);
     for (var i = 0; i < terrain.vertices.length; i++) {
         var height = array[i];
         if(height != 0)
             height = height/10;
         terrain.vertices[i].z = fullArray[i] || 0;
     }
-    
-    UpdateFaces(terrain);
-    var material = new THREE.MeshBasicMaterial({
-        vertexColors:THREE.VertexColors
-    });
+    if(optShader < 9){  
+        UpdateFaces(terrain);
+        var material = new THREE.MeshBasicMaterial({
+            vertexColors:THREE.VertexColors
+        });
+    } else if (optShader == 9){
+        var material = new THREE.MeshBasicMaterial({
+            map: texture
+        });
+    } else if(optShader == 10){
+        var material = new THREE.MeshBasicMaterial({
+            map:texture2
+        });
+    }
     plane = new THREE.Mesh(terrain, material);
 
     plane.geometry.dynamic = true;
@@ -116,7 +137,7 @@ function updateTerrain2() {
 
     scene.remove(plane);
 
-    terrain = new THREE.PlaneGeometry(60, 60, 20, 20);
+    terrain = new THREE.PlaneGeometry(sizeW, sizeL, 20, 20);
     for (var i = 0; i < terrain.vertices.length; i++) {
         var height = array[i];
         if(height != 0)
@@ -124,10 +145,21 @@ function updateTerrain2() {
         terrain.vertices[i].z = height;
 
     }
-    UpdateFaces(terrain);
-    var material = new THREE.MeshBasicMaterial({
-        vertexColors:THREE.VertexColors
-    });
+    if(optShader < 9){
+        UpdateFaces(terrain);
+        var material = new THREE.MeshBasicMaterial({
+            vertexColors:THREE.VertexColors,
+        });
+    } else if (optShader == 9){
+        var material = new THREE.MeshBasicMaterial({
+            map: texture
+        });
+    } else if(optShader == 10){
+        var material = new THREE.MeshBasicMaterial({
+            map:texture2
+        });
+    }
+    
     plane = new THREE.Mesh(terrain, material);
     edges = new THREE.FaceNormalsHelper( plane, 2, 0x00ff00, 1 );
 
@@ -179,6 +211,13 @@ function UpdateFaces(terrainMap){
                     break;
                 case 6:
                     color.setRGB(MakePercent(p.z), MakePercent(p.z)*.5, 1-MakePercent(p.z));
+                    break;
+                case 7:
+                    color.setHSL( ( p.z / radius + 1 ) / 2, p.z * Math.sin(p.z), Math.cos(p.z) );
+                    break;
+                case 8:
+                    color.setRGB(.5, .5, .5);
+                    break;
             }
             f.vertexColors[ j ] = color;
         }
@@ -193,7 +232,7 @@ function MakePercent(n){
 }
 
 function ToggleShader(){
-    if(optShader < 6){
+    if(optShader < 10){
         optShader++;
     } else{
         optShader = 0;
