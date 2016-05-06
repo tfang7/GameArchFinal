@@ -9,6 +9,7 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 var drawStyle = "none";
+var timeDomain = true;
 //GLOBAL VARIABLES
 var w = 127;                  //Width
 var l = 127;                  //Length
@@ -141,8 +142,12 @@ function updateTerrain2() {
     for (var i = 0; i < terrain.vertices.length; i++) {
         var v = dataArray[i]/128;
         //oscillate
-        //height = v * array[i] / 2;;
-        var height = array[i];
+                var height = array[i];
+
+        if (timeDomain){
+            height = v * array[i] / 2;;
+
+        }
         if(height != 0)
             height = height/15;
         terrain.vertices[i].z = height;
@@ -198,7 +203,7 @@ function UpdateFaces(terrainMap){
                     break;
                 case 1:
                     if (p.z > 7){
-                        color.setHSL( Math.cos(( p.z / radius + 1 ) / 2), 1.0, 0.5 );
+                        color.setHSL( Math.sin(p.z)*Math.cos(( p.z / radius + 1 ) / 2), 1.0, 0.5 );
                     } else if (p.z > 5){
                         color.setHSL( Math.sin(( p.z / radius +1 ) / 2), 1.0, 0.5 );
                     } else if (p.z >= 0) {
@@ -259,4 +264,8 @@ function Toggle(){
     } else{
         option = 0;
     }
+}
+function ToggleHeight(){
+ timeDomain = !timeDomain;   
+    
 }
