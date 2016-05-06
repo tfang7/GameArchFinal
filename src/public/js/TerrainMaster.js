@@ -11,6 +11,9 @@ renderer.setSize(width, height);
 
 var w = 127/2;
 var l = 127/2;
+var fullArray = new Array();
+var count = 0;
+var row = 0;
 
 var option = 1;
 
@@ -23,6 +26,7 @@ var terrain = new THREE.PlaneGeometry(60, l, w, l);
 for (var i = 0; i < terrain.vertices.length; i++) {
     terrain.vertices[i].z = 0;
 }
+
 var material = new THREE.MeshPhongMaterial({
     color: 0xdddddd,
     specular: 0x009900,
@@ -39,9 +43,6 @@ scene.add(plane);
 //ADD CAMERA CONTROLS
 var controls = new THREE.TrackballControls(camera); 
 document.getElementById('webgl').appendChild(renderer.domElement);
-var fullArray = new Array();
-var count = 0;
-var row = 0;
 
 render();
 

@@ -134,6 +134,15 @@ function stop(){
  source.stop(0);   
 }
 
+function AudioToggle(){
+    if(_fftSize == 2048){
+        _fftSize = 256;
+    } else{
+        _fftSize = 2048;
+    }
+    console.log("Size: " + _fftSize);
+}
+
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 80) {
         if (audioLoaded){
