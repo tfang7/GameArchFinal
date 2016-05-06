@@ -38,7 +38,7 @@ function render() {
     controls.update();    
     requestAnimationFrame(render);
     renderer.render(scene, camera);
-    if((array.length > 0) && !playing){
+    if((array.length > 0) && playing){
         updateTerrain();
     }
 }

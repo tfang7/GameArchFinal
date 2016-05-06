@@ -88,12 +88,12 @@ function initAudioNodes(buffer){
 	sourceJs.connect(context.destination);
 	//first analyser
     analyser = context.createAnalyser();
-	analyser.smoothingTimeConstant = 0.3;
-	analyser.fftSize = 2048;
+	analyser.smoothingTimeConstant = 0.5;
+	analyser.fftSize = 256;
 	//second
     analyser2 = context.createAnalyser();
-    analyser2.smoothingTimeConstant = 0.0;
-    analyser2.fftSize = 2048;
+    analyser2.smoothingTimeConstant = 0.5;
+    analyser2.fftSize = 256;
     
     
     //Spectrogram

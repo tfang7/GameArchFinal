@@ -10,8 +10,11 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 
+var w = 127;
+var l = 127;
+
 //CREATE THE LANDSCAPE
-var terrain = new THREE.PlaneGeometry(60, 60, 99, 99);
+var terrain = new THREE.PlaneGeometry(60, l, w, l);
 for (var i = 0; i < terrain.vertices.length; i++) {
     terrain.vertices[i].z = 0;
 }
@@ -31,6 +34,7 @@ var controls = new THREE.TrackballControls(camera);
 document.getElementById('webgl').appendChild(renderer.domElement);
 var fullArray = new Array();
 var count = 0;
+var row = 0;
 render();
 
 
@@ -47,20 +51,26 @@ function render() {
 
 function updateTerrain(){
     scene.remove(plane);
+    
+    for(var j = 0; j < l; j++){
+        var height = array[j];
+        if(height != 0)
+            height = height/50;
+        var loc = j + (row * l);
+        fullArray[loc] = height;
+    }
+    if(row < w){
+        row++;
+    } else{
+        row = 0;
+    }
         
-    terrain = new THREE.PlaneGeometry(60, 60, 99, 99);
+    terrain = new THREE.PlaneGeometry(60, 60, w, l);
     for (var i = 0; i < terrain.vertices.length; i++) {
-        fullArray[count] = array[i];
-        var height = fullArray[count];
-        //console.log("Count: " + count + ", fullArray: " + fullArray[count] + ", i: " + i + ", Array: " + array[i]);
+        var height = array[i];
         if(height != 0)
             height = height/25;
-        if(count < terrain.vertices.length){
-            terrain.vertices[count].z = height || 0;
-            count++;
-        } else{
-            count = 0;
-        }
+        terrain.vertices[i].z = fullArray[i] || 0;
     }
     var material = new THREE.MeshPhongMaterial({
         color: 0x49C960, 
