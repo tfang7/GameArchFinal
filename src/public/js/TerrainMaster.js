@@ -9,24 +9,25 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 
-var w = 127/2;
-var l = 127/2;
-var fullArray = new Array();
-var count = 0;
-var row = 0;
+//GLOBAL VARIABLES
+var w = 127/2;                  //Width
+var l = 127/2;                  //Length
+var fullArray = new Array();    //Contains data for second render style
+var row = 0;                    //Tracks row for second render style
+var option = 1;                 //Determines render style
 
-var option = 1;
-
+//CREATE LIGHT
 var light = new THREE.PointLight(0x404040, 5, 0 );
 light.position.set( 0, 0, 50 );
 scene.add( light );
 
-//CREATE THE LANDSCAPE
+//CREATE THE BLANK LANDSCAPE
 var terrain = new THREE.PlaneGeometry(60, l, w, l);
 for (var i = 0; i < terrain.vertices.length; i++) {
     terrain.vertices[i].z = 0;
 }
 
+//CREATE MATERIAL
 var material = new THREE.MeshPhongMaterial({
     color: 0xdddddd,
     specular: 0x009900,
@@ -34,6 +35,7 @@ var material = new THREE.MeshPhongMaterial({
     shading: THREE.FlatShading,
 });
 
+//ASSIGN TO OBJECT
 var plane = new THREE.Mesh(terrain, material);
 plane.geometry.dynamic = true;
 plane.geometry.verticesNeedUpdate = true;
@@ -47,6 +49,10 @@ document.getElementById('webgl').appendChild(renderer.domElement);
 render();
 
 function render(){
+    //INPUT: None
+    //OUTPUT: None
+    //DESCRIPTION: Renders the frame, calls appropriate updateTerrain function
+    
     controls.update();
     requestAnimationFrame(render);
     renderer.render(scene, camera);
@@ -60,6 +66,10 @@ function render(){
 }
 
 function updateTerrain(){
+    //INPUT: None
+    //OUTPUT: None
+    //DESCRIPTION: Updates row of terrain, where each row is a representation of that frame's audio data, to visualise audio over time
+    
     scene.remove(plane);
     
     for(var j = 0; j < l; j++){
@@ -99,6 +109,10 @@ function updateTerrain(){
 }
 
 function updateTerrain2() {
+    //INPUT: None
+    //OUTPUT: None
+    //DESCRIPTION: Updates entire terrain each frame as a representation of that frame's audio data
+
     scene.remove(plane);
 
     terrain = new THREE.PlaneGeometry(60, 60, 20, 20);
