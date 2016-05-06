@@ -10,8 +10,12 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
 
-var w = 127;
-var l = 127;
+var w = 127/2;
+var l = 127/2;
+
+var light = new THREE.PointLight(0x404040, 5, 0 );
+light.position.set( 0, 0, 50 );
+scene.add( light );
 
 //CREATE THE LANDSCAPE
 var terrain = new THREE.PlaneGeometry(60, l, w, l);
@@ -19,8 +23,11 @@ for (var i = 0; i < terrain.vertices.length; i++) {
     terrain.vertices[i].z = 0;
 }
 var material = new THREE.MeshPhongMaterial({
-    color: 0x49C960, 
-    wireframe: true
+    color: 0xdddddd,
+    specular: 0x009900,
+    shininess: 30,
+    shading: THREE.FlatShading,
+    //wireframe: true
 });
 
 var plane = new THREE.Mesh(terrain, material);
@@ -72,10 +79,6 @@ function updateTerrain(){
             height = height/25;
         terrain.vertices[i].z = fullArray[i] || 0;
     }
-    var material = new THREE.MeshPhongMaterial({
-        color: 0x49C960, 
-        wireframe: true
-    });
 
     plane = new THREE.Mesh(terrain, material);
 
