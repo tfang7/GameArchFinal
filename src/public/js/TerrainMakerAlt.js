@@ -40,7 +40,7 @@ function render() {
     controls.update();    
     requestAnimationFrame(render);
     renderer.render(scene, camera);
-    if((array.length > 0) && (array[0] != 0)){
+    if((array.length > 0) && (array[0] != 0) && playing){
         updateTerrain();
     }
 }
