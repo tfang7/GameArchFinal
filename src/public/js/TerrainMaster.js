@@ -80,11 +80,21 @@ function updateTerrain(){
     for (var i = 0; i < terrain.vertices.length; i++) {
         var height = array[i];
         if(height != 0)
-            height = height/25;
+            height = height/10;
         terrain.vertices[i].z = fullArray[i] || 0;
     }
-
+    
+    UpdateFaces(terrain);
+    var material = new THREE.MeshBasicMaterial({
+        vertexColors:THREE.VertexColors
+    });
     plane = new THREE.Mesh(terrain, material);
+
+    plane.geometry.dynamic = true;
+    plane.geometry.verticesNeedUpdate = true;
+    plane.geometry.normalsNeedUpdate = true;
+    plane.geometry.colorsNeedUpdate = true;
+    plane.dynamic = true;
 
     scene.add(plane);
 }
