@@ -124,6 +124,7 @@ function play() {
 		$(this).remove();
         $('info').remove();
 	});
+    playing = true;
 	source.start(0);
 }
 function stop(){
