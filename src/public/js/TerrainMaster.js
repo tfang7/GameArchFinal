@@ -1,10 +1,9 @@
 
 //SCENE SETUP
-var width  = window.innerWidth/2,
+var width  = window.innerWidth,
     height = window.innerHeight/2;
 var scene = new THREE.Scene();
 var axes = new THREE.AxisHelper(200);
-//scene.add(axes);
 var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
 camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -29,7 +28,6 @@ var material = new THREE.MeshPhongMaterial({
     specular: 0x009900,
     shininess: 30,
     shading: THREE.FlatShading,
-    //wireframe: true
 });
 
 var plane = new THREE.Mesh(terrain, material);
@@ -117,9 +115,6 @@ function updateTerrain2() {
     plane = new THREE.Mesh(terrain, material);
     edges = new THREE.FaceNormalsHelper( plane, 2, 0x00ff00, 1 );
 
-    //plane.geometry.dynamic = true;
-    //plane.geometry.verticesNeedUpdate = true;
-    //plane.geometry.normalsNeedUpdate = true;
     plane.geometry.dynamic = true;
     plane.geometry.verticesNeedUpdate = true;
     plane.geometry.normalsNeedUpdate = true;
@@ -131,7 +126,7 @@ function updateTerrain2() {
 
 
 function UpdateFaces(terrainMap){
- var vertexIndex;
+    var vertexIndex;
 
     var faceIndices = [ 'a', 'b', 'c' ];
     var color, f, p, vertexIndex,
@@ -140,7 +135,6 @@ function UpdateFaces(terrainMap){
     for (var i = 0; i < terrainMap.faces.length; i ++ ) {
         f = terrainMap.faces[i];
         for (var j = 0; j < 3; j++){
-          //  console.log(
          vertexIndex = f[ faceIndices[j] ];
          p = terrainMap.vertices[ vertexIndex ];
             
@@ -154,11 +148,13 @@ function UpdateFaces(terrainMap){
 }
 
 function Toggle(){
-    console.log("Toggle: ");
+    //INPUT: None
+    //OUTPUT: None
+    //DESCRIPTION: Toggles the landscape generation mode. Called by button.
+    
     if (option == 0){
         option = 1;
     } else{
         option = 0;
     }
-    console.log(option);
 }
