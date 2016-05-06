@@ -1,0 +1,2 @@
+In order to run this app, run index.html on local host via python simple server or Brackets.
+The song used in the app can be changed by accessing audio.js and changing the url name to the proper mp3 filename.
