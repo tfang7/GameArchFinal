@@ -8,7 +8,7 @@ var camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
 camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(width, height);
-
+var drawStyle = "none";
 //GLOBAL VARIABLES
 var w = 127;                  //Width
 var l = 127;                  //Length
@@ -65,7 +65,7 @@ function render(){
     //INPUT: None
     //OUTPUT: None
     //DESCRIPTION: Renders the frame, calls appropriate updateTerrain function
-    
+
     controls.update();
     requestAnimationFrame(render);
     renderer.render(scene, camera);
@@ -139,6 +139,9 @@ function updateTerrain2() {
 
     terrain = new THREE.PlaneGeometry(sizeW, sizeL, 20, 20);
     for (var i = 0; i < terrain.vertices.length; i++) {
+        var v = dataArray[i]/128;
+        //oscillate
+        //height = v * array[i] / 2;;
         var height = array[i];
         if(height != 0)
             height = height/15;
@@ -178,24 +181,31 @@ function UpdateFaces(terrainMap){
 
     var faceIndices = [ 'a', 'b', 'c' ];
     var color, f, p, vertexIndex,
-					radius = 200;
+                    //old value == 200
+					radius = bufferLength / 100;
     
     for (var i = 0; i < terrainMap.faces.length; i ++ ) {
         f = terrainMap.faces[i];
         for (var j = 0; j < 3; j++){
             vertexIndex = f[ faceIndices[j] ];
             p = terrainMap.vertices[ vertexIndex ];
-            
             color = new THREE.Color(0xff0000);
-            //color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
-            color.setRGB(.1, MakePercent(p.z), .1);
+            color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
             //console.log("In: " + p.z + ", Out: " + MakePercent(p.z));
             switch(optShader){
                 case 0:
-                    color.setHSL( ( p.y / radius + 1 ) / 2, 1.0, 0.5 );
+                    color.setHSL( (p.z / radius + 1 ) / 2, 1.0, 0.5);
                     break;
                 case 1:
-                    color.setRGB(.1, MakePercent(p.z), .1);
+                    if (p.z > 7){
+                        color.setHSL( Math.cos(( p.z / radius + 1 ) / 2), 1.0, 0.5 );
+                    } else if (p.z > 5){
+                        color.setHSL( Math.sin(( p.z / radius +1 ) / 2), 1.0, 0.5 );
+                    } else if (p.z >= 0) {
+                        color.setHSL( (Math.tan( p.z / radius +1 ) / 2), 1.0, 0.5 );
+                        
+                    }
+                    //color.setRGB(.1, MakePercent(p.z), .1);
                     break;
                 case 2:
                     color.setRGB(MakePercent(p.z), MakePercent(p.z), MakePercent(p.z));
@@ -213,7 +223,7 @@ function UpdateFaces(terrainMap){
                     color.setRGB(MakePercent(p.z), MakePercent(p.z)*.5, 1-MakePercent(p.z));
                     break;
                 case 7:
-                    color.setHSL( ( p.z / radius + 1 ) / 2, p.z * Math.sin(p.z), Math.cos(p.z) );
+                    color.setHSL( ( p.z / radius + 1 ) / 2, p.z * Math.sin(p.z), Math.sin(p.z) );
                     break;
                 case 8:
                     color.setRGB(.5, .5, .5);
